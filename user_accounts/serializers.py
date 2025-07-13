@@ -22,7 +22,7 @@ class RegisterSerializer(serializers.ModelSerializer):
         return user
 
     def send_confirmation_email(self, email, token):
-        confirm_link = f"http://localhost:8000/accounts/confirm-email/{token}/"
+        confirm_link = f"http://92.255.79.122:8090/accounts/confirm-email/{token}/"
         send_mail(
             subject='Confirm your email',
             message=f'Click here to confirm: {confirm_link}',
@@ -65,7 +65,7 @@ class ForgotPasswordSerializer(serializers.Serializer):
         user = User.objects.get(email=email)
         reset_token = PasswordResetToken.objects.create(user=user)
 
-        reset_link = f"http://localhost:8000/account/reset-password/{reset_token.token}/"
+        reset_link = f"http://92.255.79.122:8090/account/reset-password/{reset_token.token}/"
         send_mail(
             subject="Сброс пароля",
             message=f"Перейдите по ссылке для сброса пароля: {reset_link}",
