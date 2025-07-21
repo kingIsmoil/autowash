@@ -12,6 +12,15 @@ class RegisterSerializer(serializers.ModelSerializer):
         fields = ['email','fullname', 'phone_number','password']
         extra_kwargs = {'password': {'write_only': True}}
 
+    def validate_phone_number(self, value):
+        if not value.startswith('992'):
+            raise serializers.ValidationError("Номер телефона должен начинаться с '992'.")
+        if len(value) != 12:
+            raise serializers.ValidationError("Номер телефона должен содержать ровно 12 цифр.")
+        if not value.isdigit():
+            raise serializers.ValidationError("Номер телефона должен содержать только цифры.")
+        return value
+
     def create(self, validated_data):
         user = CustomUser.objects.create_user(**validated_data)
         user.is_active = False
