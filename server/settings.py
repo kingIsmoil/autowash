@@ -86,11 +86,11 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'carwash',
-        'USER': 'employ',
-        'PASSWORD': 'admin2025',
+        'NAME': os.environ.get('POSTGRES_DB','carwash'),
+        'USER': os.environ.get('POSTGRES_USER','employ'),
+        'PASSWORD': os.environ.get('POSTGRES_PASSWORD','admin2025'),
         'HOST': os.environ.get('DB_HOST', 'db'),
-        'PORT': '5432',
+        'PORT': os.environ.get('DB_PORT','5432'),
     }
 }
 
