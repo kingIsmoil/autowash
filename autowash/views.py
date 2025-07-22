@@ -75,45 +75,47 @@ class CarViewSet(viewsets.ModelViewSet):
         """
         Показывает:
         - total за всё время
-        - total за сегодня
-        - total по заданному фильтру (entry_time__gte / lte)
+        - total за сегодня (по умолчанию)
+        - total по фильтру (если передан фильтр entry_time__gte / lte)
         """
         user = request.user
-        cache_key = f"totals_user_{user.id}"
+        query_params = request.GET.dict()
+        has_filter = 'entry_time__gte' in query_params or 'entry_time__lte' in query_params
+        cache_key = f"totals_user_{user.id}_{'filtered' if has_filter else 'today'}"
+
         cached = cache.get(cache_key)
         if cached:
             return Response(cached)
-        
+
         base_queryset = self.get_queryset()
-        filtered_queryset = CarFilter(request.GET, queryset=base_queryset).qs
+
         total_all = base_queryset.aggregate(
             total_cars=Count('id'),
             total_price=Sum('service_id__price')
         )
-        today = now().date()
-        today_queryset = base_queryset.filter(entry_time__date=today)
-        total_today = today_queryset.aggregate(
-            total_cars=Count('id'),
-            total_price=Sum('service_id__price')
-        )
+
+        if has_filter:
+            filtered_queryset = CarFilter(request.GET, queryset=base_queryset).qs
+        else:
+            today = now().date()
+            filtered_queryset = base_queryset.filter(entry_time__date=today)
+
         total_filtered = filtered_queryset.aggregate(
             total_cars=Count('id'),
             total_price=Sum('service_id__price')
         )
+
         result = {
             'total_all': {
                 'total_cars': total_all['total_cars'] or 0,
                 'total_price': total_all['total_price'] or 0
             },
-            'total_today': {
-                'total_cars': total_today['total_cars'] or 0,
-                'total_price': total_today['total_price'] or 0
-            },
             'total_filtered': {
                 'total_cars': total_filtered['total_cars'] or 0,
                 'total_price': total_filtered['total_price'] or 0
-            }
+            },
         }
+
         cache.set(cache_key, result, timeout=60)
         return Response(result)
 
