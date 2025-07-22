@@ -5,11 +5,23 @@ services:
     build: .
     command: python manage.py runserver 0.0.0.0:8000
     ports:
-      - "8000:8000"
+      - "8090:8000"
     volumes:
       - .:/app
     depends_on:
+      - db
       - redis
+    environment:
+      - DB_HOST=db
+
+  db:
+    image: postgres:15
+    environment:
+      POSTGRES_DB: carwash
+      POSTGRES_USER: employ
+      POSTGRES_PASSWORD: admin2025
+    ports:
+      - "5433:5432"
 
   redis:
     image: redis:7

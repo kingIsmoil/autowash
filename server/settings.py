@@ -10,6 +10,8 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.2/ref/settings/
 """
 
+from datetime  import timedelta
+import os
 from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -83,10 +85,15 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / "db.sqlite3",
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'carwash',
+        'USER': 'employ',
+        'PASSWORD': 'admin2025',
+        'HOST': os.environ.get('DB_HOST', 'db'),
+        'PORT': '5432',
     }
 }
+
 
 
 # Password validation
@@ -138,7 +145,6 @@ REST_FRAMEWORK = {
 }
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend' 
 DEFAULT_FROM_EMAIL = 'ismoilumarzoda@gmail.com'
-from datetime  import timedelta
 SIMPLE_JWT = {
 'ACCESS_TOKEN_LIFETIME': timedelta(minutes=60),
 'REFRESH_TOKEN_LIFETIME': timedelta(days=1),
@@ -147,8 +153,6 @@ SIMPLE_JWT = {
 }
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 DEFAULT_FROM_EMAIL = 'ismoilumarzoda@gmail.com'
-from datetime import timedelta
-
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_PORT = 587

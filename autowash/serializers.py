@@ -5,7 +5,7 @@ class WashStationSerializer(serializers.ModelSerializer):
     class Meta:
         model = WashStation
         fields = '__all__'
-        read_only_fields = ['user_id']  # пользователь сам не указывает
+        read_only_fields = ['user_id']  
 
 class EmployeeSerializer(serializers.ModelSerializer):
     class Meta:
