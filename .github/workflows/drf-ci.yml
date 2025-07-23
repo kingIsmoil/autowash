@@ -1,4 +1,4 @@
-name: Django DRF CI (SQLite)
+name: Django DRF CI
 
 on:
   push:
@@ -17,9 +17,12 @@ jobs:
           POSTGRES_USER: employ
           POSTGRES_PASSWORD: admin2025
           POSTGRES_DB: carwash
-        ports:
-          - 5433:5432
-          
+
+    env:
+      CI: true
+      DB_HOST: postgres
+      DB_PORT: 5432
+
     steps:
       - name: Checkout repo
         uses: actions/checkout@v3
@@ -30,13 +33,17 @@ jobs:
           python-version: 3.11
 
       - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: Wait for Postgres to be ready
         run: |
-          pip install -r requirements.txt
+          until pg_isready -h $DB_HOST -p $DB_PORT -U employ; do
+            echo "Waiting for postgres…"
+            sleep 1
+          done
 
       - name: Run migrations
-        run: |
-          python manage.py migrate
+        run: python manage.py migrate
 
       - name: Run tests
-        run: |
-          python manage.py test
+        run: python manage.py test

@@ -83,14 +83,20 @@ WSGI_APPLICATION = 'server.wsgi.application'
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
+
+if os.environ.get("CI", "false").lower() == "true":
+    DB_HOST = "localhost"
+else:
+    DB_HOST = os.environ.get("DB_HOST", "db")
+
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': os.environ.get('POSTGRES_DB','carwash'),
-        'USER': os.environ.get('POSTGRES_USER','employ'),
-        'PASSWORD': os.environ.get('POSTGRES_PASSWORD','admin2025'),
-        'HOST': os.environ.get('DB_HOST', 'db'),
-        'PORT': os.environ.get('DB_PORT','5432'),
+        'NAME': 'carwash',
+        'USER': 'employ',
+        'PASSWORD': 'admin2025',
+        'HOST': DB_HOST,
+        'PORT': '5432',
     }
 }
 
