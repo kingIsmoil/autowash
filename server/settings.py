@@ -84,12 +84,8 @@ WSGI_APPLICATION = 'server.wsgi.application'
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 
-import os
 
-if os.environ.get("CI", "false").lower() == "true":
-    DB_HOST = os.environ.get("DB_HOST", "postgres")
-else:
-    DB_HOST = "localhost"
+DB_HOST = os.environ.get("DB_HOST", "localhost")
 
 DATABASES = {
     'default': {
