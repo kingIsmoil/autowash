@@ -22,6 +22,9 @@ jobs:
       CI: true
       DB_HOST: postgres
       DB_PORT: 5432
+      POSTGRES_USER: employ
+      POSTGRES_PASSWORD: admin2025
+      POSTGRES_DB: carwash
 
     steps:
       - name: Checkout repo
@@ -35,10 +38,13 @@ jobs:
       - name: Install dependencies
         run: pip install -r requirements.txt
 
+      - name: Install PostgreSQL client
+        run: sudo apt-get update && sudo apt-get install -y postgresql-client
+
       - name: Wait for Postgres to be ready
         run: |
-          until pg_isready -h $DB_HOST -p $DB_PORT -U employ; do
-            echo "Waiting for postgres…"
+          until pg_isready -h $DB_HOST -p $DB_PORT -U $POSTGRES_USER; do
+            echo "Waiting for Postgres to be ready..."
             sleep 1
           done
 
