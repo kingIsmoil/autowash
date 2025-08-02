@@ -90,12 +90,12 @@ DB_HOST = os.environ.get("DB_HOST", "localhost")
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': os.environ.get("POSTGRES_DB", "carwash"),
-        'USER': os.environ.get("POSTGRES_USER", "employ"),
-        'PASSWORD': os.environ.get("POSTGRES_PASSWORD", "admin2025"),
-        'HOST': DB_HOST,
-        'PORT': os.environ.get("DB_PORT", "5432"),
-    }
+        'NAME': 'autowash',
+        'USER': 'autowash_user',
+        'PASSWORD': 'yourpassword',
+        'HOST': 'localhost',
+        'PORT': '5432',
+        }
 }
 
 
@@ -148,7 +148,6 @@ REST_FRAMEWORK = {
 'rest_framework_simplejwt.authentication.JWTAuthentication',),
 'DEFAULT_FILTER_BACKENDS': ['django_filters.rest_framework.DjangoFilterBackend'],
 }
-EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend' 
 DEFAULT_FROM_EMAIL = 'ismoilumarzoda@gmail.com'
 SIMPLE_JWT = {
 'ACCESS_TOKEN_LIFETIME': timedelta(minutes=60),
@@ -156,7 +155,6 @@ SIMPLE_JWT = {
 'BLACKLIST_AFTER_ROTATION': True,
 'ROTATE_REFRESH_TOKENS': True,
 }
-EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 DEFAULT_FROM_EMAIL = 'ismoilumarzoda@gmail.com'
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.gmail.com'
@@ -184,15 +182,13 @@ SWAGGER_SETTINGS = {
 CACHES = {
     "default": {
         "BACKEND": "django_redis.cache.RedisCache",
-        "LOCATION": "redis://redis:6379/1",
+        "LOCATION": "redis://127.0.0.1:6379/1",
         "OPTIONS": {
             "CLIENT_CLASS": "django_redis.client.DefaultClient",
         }
     }
 }
-
 CORS_ALLOWED_ORIGINS = [
-    "http://localhost:3000",
-    "http://127.0.0.1:3000",
+"http://92.255.79.122:3002",
 ]
 
