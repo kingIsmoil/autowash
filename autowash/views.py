@@ -18,7 +18,9 @@ class WashStationViewSet(viewsets.ModelViewSet):
 
     def get_queryset(self):
         user = self.request.user
-        if user.is_authenticated:
+        if user.is_staff or user.is_superuser:
+            return WashStation.objects.all()
+        elif user.is_authenticated:
             return WashStation.objects.filter(user_id=user)
         return WashStation.objects.none()
 
@@ -37,7 +39,9 @@ class EmployeeViewSet(viewsets.ModelViewSet):
 
     def get_queryset(self):
         user = self.request.user
-        if user.is_authenticated:
+        if user.is_staff or user.is_superuser:
+            return Employee.objects.all()
+        elif user.is_authenticated:
             return Employee.objects.filter(wash_id__user_id=user)
         return Employee.objects.none()
 
@@ -50,7 +54,9 @@ class ServiceViewSet(viewsets.ModelViewSet):
 
     def get_queryset(self):
         user = self.request.user
-        if user.is_authenticated:
+        if user.is_staff or user.is_superuser:
+            return Service.objects.all()
+        elif user.is_authenticated:
             return Service.objects.filter(wash_id__user_id=user)
         return Service.objects.none()
 
@@ -66,9 +72,12 @@ class CarViewSet(viewsets.ModelViewSet):
 
     def get_queryset(self):
         user = self.request.user
-        if user.is_authenticated:
-            return Car.objects.filter(wash_id__user_id=user)
-        return Car.objects.none()
+        if user.is_staff or user.is_superuser:
+            return Car.objects.all()
+        elif not user.is_authenticated:
+            return Car.objects.none()
+        return Car.objects.filter(wash_id__user_id=user)
+
 
     @action(detail=False, methods=['get'], url_path='totals')
     def totals(self, request):
